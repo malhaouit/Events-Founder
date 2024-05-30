@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Events Founder</string>
+    <string name="activity_event_details_title">Event Details</string>
+    <string name="activity_add_event_title">Add New Event</string>
+    <string name="activity_edit_event_title">Edit Event</string>
+    <string-array name="categories">
+        <item>All</item>
+        <item>Health</item>
+        <item>Sport</item>
+        <item>Food &amp; Drink</item>
+        <item>Hobbies</item>
+        <item>Business</item>
+        <item>Others</item>
+    </string-array>
+</resources>
