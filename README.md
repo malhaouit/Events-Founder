@@ -24,16 +24,16 @@ Events Founder is an Android application that allows users to create, manage, an
 
 1. Creating an Event:
 
-	Click on the Add Event button.  
-	Fill in the event details and click Save.
+	- Click on the Add Event button.  
+	- Fill in the event details and click Save.
 
 2. Editing an Event:
 
-	Click on an event in the list to view details.  
-	Click the Edit button.  
-	Update the event details and click Save.   
+	- Click on an event in the list to view details.  
+	- Click the Edit button.  
+	- Update the event details and click Save.   
 
 3. Deleting an Event:
 
-	Click on an event in the list to view details.  
-	Click the Delete button.
+	- Click on an event in the list to view details.  
+	- Click the Delete button.
