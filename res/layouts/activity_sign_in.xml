@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignInActivity">
+
+    <TextView
+        android:id="@+id/sign_out_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out Message"
+        android:layout_centerInParent="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/go_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go back"
+        style="@style/CustomButtonStyle"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/sign_out_message"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/sign_in_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/sign_in_success_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signed in successfully."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/proceed_to_add_event_button"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/sign_in_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Authentication Failed. Please retry."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/retry_sign_in_button"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/proceed_to_add_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proceed to Add Event"
+        style="@style/CustomButtonStyle"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/retry_sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        style="@style/CustomButtonStyle"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>
