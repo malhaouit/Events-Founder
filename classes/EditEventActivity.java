@@ -93,7 +93,7 @@ public class EditEventActivity extends AppCompatActivity {
                                     });
                         }
 
-                        String[] categories = getResources().getStringArray(R.array.categories);
+                        String[] categories = getResources().getStringArray(R.array.add_event_categories);
                         for (int i = 0; i < categories.length; i++) {
                             if (categories[i].equalsIgnoreCase(event.getCategory())) {
                                 spinnerCategory2.setSelection(i);
