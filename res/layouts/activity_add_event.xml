@@ -1,74 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp"
-    tools:context=".AddEventActivity">
+    android:padding="10dp"
+    android:background="#f5f5f5">
 
-    <EditText
-        android:id="@+id/editTextEventName"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event Name" />
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:context=".AddEventActivity">
 
-    <EditText
-        android:id="@+id/editTextEventDateTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Event Date/Time" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Event Name"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp">
 
-    <EditText
-        android:id="@+id/editTextEventDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description" />
+            <EditText
+                android:id="@+id/editTextEventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editTextEventDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Details" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Event Date/Time"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp">
 
-    <Spinner
-        android:id="@+id/spinnerCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:entries="@array/categories" />
+            <EditText
+                android:id="@+id/editTextEventDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/checkBoxIsOnline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Online Event" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Event Description"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp">
 
-    <EditText
-        android:id="@+id/editTextStreet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Street"/>
+            <EditText
+                android:id="@+id/editTextEventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editTextCity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="City"/>
 
-    <EditText
-        android:id="@+id/editTextCountry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Country"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Event Details"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp">
 
-    <Button
-        android:id="@+id/buttonSaveEvent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Event"
-        style="@style/CustomButtonStyle" />
+            <EditText
+                android:id="@+id/editTextEventDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:entries="@array/add_event_categories" />
+
+        <CheckBox
+            android:id="@+id/checkBoxIsOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Online Event"
+            android:layout_marginBottom="16dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Street"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/editTextStreet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_background"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/editTextCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonSaveEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Event"
+            style="@style/CustomButtonStyle" />
+
+    </LinearLayout>
+
+</ScrollView>
