@@ -1,5 +1,7 @@
 package com.amtrustdev.localeventfinder;
 
+import static com.amtrustdev.localeventfinder.R.id.*;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amtrustdev.localeventfinder.models.Event;
 import com.amtrustdev.localeventfinder.models.Location;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -35,10 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private FirebaseFirestore firestore;
     private Map<String, Location> locationMap;
-    private Spinner categorySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
 
         recyclerView = findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        categorySpinner = findViewById(R.id.categorySpinner);
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.spinner_item);
         arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                fetchLocations("All");
+                fetchLocations("All Events");
             }
         });
 
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                 event.setDocumentId(doc.getId());
                                 String eventCategory = event.getCategory();
 
-                                if (category.equalsIgnoreCase("All") || category.equalsIgnoreCase(eventCategory)) {
+                                if (category.equalsIgnoreCase("All Events") || category.equalsIgnoreCase(eventCategory)) {
                                     eventList.add(event);
                                 }
                             }
@@ -138,10 +140,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_event) {
-            Intent intent = new Intent(this, AddEventActivity.class);
-            startActivity(intent);
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                startActivity(new Intent(MainActivity.this, AddEventActivity.class));
+            } else {
+                startActivity(new Intent(MainActivity.this, SignInActivity.class).putExtra("action", "addEvent"));
+            }
             return true;
         }
+        else if (item.getItemId() == R.id.action_sign_out) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, SignInActivity.class).putExtra("isSigningOut", true));
+                finish();
+            } else {
+                Toast.makeText(this, "No user is signed in!", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (item.getItemId() == action_sign_in) {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                startActivity(new Intent(MainActivity.this, SignInActivity.class).putExtra("action", "signIn"));
+            } else {
+                Toast.makeText(this, "User already signed in!", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
