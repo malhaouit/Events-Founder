@@ -8,4 +8,14 @@
         android:icon="@drawable/ic_add"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_sign_in"
+        android:title="Sign In"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sign_out"
+        android:title="Sign Out"
+        app:showAsAction="never" />
+
 </menu>
