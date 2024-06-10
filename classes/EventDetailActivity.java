@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.amtrustdev.localeventfinder.models.Event;
 import com.amtrustdev.localeventfinder.models.Location;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -93,24 +95,38 @@ public class EventDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     Event event = documentSnapshot.toObject(Event.class);
                     if (event != null) {
-                        Log.d(TAG, "Event fetched from Firestore: " + event.toString()); // Log the entire event object
-                        eventName.setText(event.getEventName());
-                        eventDateTime.setText(event.getDateTime());
-                        eventDescription.setText(event.getDescription());
-                        eventDetails.setText(event.getDetails());
-
-                        if (event.isOnline()) {
-                            eventLocation.setText("Online");
+                        updateUIWithEventDetails(event);
+                        // Check if the current user is the creator of the event
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        if (currentUser != null && event.getUserId().equals(currentUser.getUid())) {
+                            // User is the creator, show edit and delete buttons
+                            edit_event_button.setVisibility(View.VISIBLE);
+                            delete_event_button.setVisibility(View.VISIBLE);
                         }
                         else {
-                            Toast.makeText(this, event.isOnline()+"", Toast.LENGTH_SHORT).show();
-                            fetchLocationDetails(event.getLocationId());
+                            // User is not the creator, hide edit and delete buttons
+                            edit_event_button.setVisibility(View.GONE);
+                            delete_event_button.setVisibility(View.GONE);
                         }
                     }
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "Error getting event details", e);
                 });
+    }
+
+    private void updateUIWithEventDetails(Event event) {
+        eventName.setText(event.getEventName());
+        eventDateTime.setText(event.getDateTime());
+        eventDescription.setText(event.getDescription());
+        eventDetails.setText(event.getDetails());
+
+        if (event.isOnline()) {
+            eventLocation.setText("Online");
+        }
+        else {
+            fetchLocationDetails(event.getLocationId());
+        }
     }
 
     private void fetchLocationDetails(String locationId) {
