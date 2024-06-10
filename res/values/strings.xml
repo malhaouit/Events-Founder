@@ -3,8 +3,9 @@
     <string name="activity_event_details_title">Event Details</string>
     <string name="activity_add_event_title">Add New Event</string>
     <string name="activity_edit_event_title">Edit Event</string>
+
     <string-array name="categories">
-        <item>All</item>
+        <item>All Events</item>
         <item>Health</item>
         <item>Sport</item>
         <item>Food &amp; Drink</item>
@@ -12,4 +13,15 @@
         <item>Business</item>
         <item>Others</item>
     </string-array>
+
+    <string-array name="add_event_categories">
+        <item>Health</item>
+        <item>Sport</item>
+        <item>Food &amp; Drink</item>
+        <item>Hobbies</item>
+        <item>Business</item>
+        <item>Others</item>
+    </string-array>
+
+    <string name="default_web_client_id">587131977614-qb6bcqov4lpgkj09rasuak94h9tnqv3p.apps.googleusercontent.com</string>
 </resources>
