@@ -1,8 +1,8 @@
 package com.amtrustdev.localeventfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -16,143 +16,135 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.amtrustdev.localeventfinder.models.Event;
 import com.amtrustdev.localeventfinder.models.Location;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class EditEventActivity extends AppCompatActivity {
-    private EditText editTextName2, editTextDateTime2, editTextDescription2, editTextDetails2, editTextStreet2, editTextCity2, editTextCountry2;
-    private CheckBox checkBoxIsOnline2;
-    private Button buttonSaveEvent2;;
-    private FirebaseFirestore firestore;
-    private Spinner spinnerCategory2;
-    private String eventId;
+
+public class AddEventActivity extends AppCompatActivity {
+    // Edit texts to enter event's details
+    private EditText editTextEventName, editTextEventDateTime, editTextEventDescription, editTextEventDetails, editTextStreet, editTextCity, editTextCountry;
+    private Spinner spinnerCategory; // Used to select one of the event's categories by the user
+    private CheckBox checkBoxIsOnline; // If the checkbox is checked then event is online, if not, the event has physical location
+    private FirebaseFirestore firestore; // Using Firestore for data retrieval and storage
+    private FirebaseAuth firebaseAuth; // The entry point of the Firebase Authentication
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_edit_event);
+        setContentView(R.layout.activity_add_event);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        setTitle(R.string.activity_edit_event_title);
+        // Set the title of the activity to "Add New Event"
+        setTitle(R.string.activity_add_event_title);
 
-        editTextName2 = findViewById(R.id.editTextEventName2);
-        editTextDateTime2 = findViewById(R.id.editTextEventDateTime2);
-        editTextDescription2 = findViewById(R.id.editTextEventDescription2);
-        editTextDetails2 = findViewById(R.id.editTextEventDetails2);
-        editTextStreet2 = findViewById(R.id.editTextStreet2);
-        editTextCity2 = findViewById(R.id.editTextCity2);
-        editTextCountry2 = findViewById(R.id.editTextCountry2);
-        checkBoxIsOnline2 = findViewById(R.id.checkBoxIsOnline2);
-        buttonSaveEvent2 = findViewById(R.id.buttonSaveEvent2);
+        // Finds the views identified by the id attributes from the XML layout resources
+        editTextEventName = findViewById(R.id.editTextEventName);
+        editTextEventDateTime = findViewById(R.id.editTextEventDateTime);
+        editTextEventDescription = findViewById(R.id.editTextEventDescription);
+        editTextEventDetails = findViewById(R.id.editTextEventDetails);
+        editTextStreet = findViewById(R.id.editTextStreet);
+        editTextCity = findViewById(R.id.editTextCity);
+        editTextCountry = findViewById(R.id.editTextCountry);
+        spinnerCategory = findViewById(R.id.spinnerCategory);
+        checkBoxIsOnline = findViewById(R.id.checkBoxIsOnline);
+        Button buttonSaveEvent = findViewById(R.id.buttonSaveEvent);
 
+        // Returns the default FirebaseFirestore instance
         firestore = FirebaseFirestore.getInstance();
+        // Returns an instance of the class FirebaseAuth
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        spinnerCategory2 = findViewById(R.id.spinnerCategory2);
-
-        eventId = getIntent().getStringExtra("eventId");
-        loadEventData(eventId);
-
-        checkBoxIsOnline2.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editTextStreet2.setEnabled(!isChecked);
-            editTextCity2.setEnabled(!isChecked);
-            editTextCountry2.setEnabled(!isChecked);
+        // If the user click the checkbox, the checkbox become checked and verse versa
+        checkBoxIsOnline.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editTextStreet.setEnabled(!isChecked);
+            editTextCity.setEnabled(!isChecked);
+            editTextCountry.setEnabled(!isChecked);
         });
 
-        buttonSaveEvent2.setOnClickListener(this::updateEvent);
+        // Handles Save Event button action
+        buttonSaveEvent.setOnClickListener(view -> {
+            // Gets the current user
+            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            // Check if the current user is authenticated before saving a new event
+            if (currentUser != null) {
+                // Passe the current user id as parameter
+                saveEvent(currentUser.getUid());
+            }
+        });
     }
 
-    private void loadEventData(String eventId) {
-        firestore.collection("events").document(eventId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    Event event = documentSnapshot.toObject(Event.class);
-                    if (event != null) {
-                        editTextName2.setText(event.getEventName());
-                        editTextDateTime2.setText(event.getDateTime());
-                        editTextDescription2.setText(event.getDescription());
-                        editTextDetails2.setText(event.getDetails());
-                        checkBoxIsOnline2.setChecked(event.isOnline());
+    private void saveEvent(String userId) {
+        // Gets the edit texts contents entered by the user and store them in variables
+        String eventName = editTextEventName.getText().toString().trim();
+        String eventDateTime = editTextEventDateTime.getText().toString().trim();
+        String eventDescription = editTextEventDescription.getText().toString().trim();
+        String eventDetails = editTextEventDetails.getText().toString().trim();
+        // Get the selected item for the spinner of categories and store it into selectedCategory variable
+        String selectedCategory = spinnerCategory.getSelectedItem().toString();
+        // Store the returned boolean value of the checkbox
+        boolean isOnline = checkBoxIsOnline.isChecked();
 
-                        if (event.isOnline()) {
-                            editTextStreet2.setEnabled(false);
-                            editTextCity2.setEnabled(false);
-                            editTextCountry2.setEnabled(false);
-                        }
-                        else  {
-                            firestore.collection("locations").document(event.getLocationId()).get()
-                                    .addOnSuccessListener(locationSnapshot -> {
-                                        Location location = locationSnapshot.toObject(Location.class);
-                                        if (location != null) {
-                                            editTextStreet2.setText(location.getStreet());
-                                            editTextCity2.setText(location.getCity());
-                                            editTextCountry2.setText(location.getCountry());
-                                        }
-                                    });
-                        }
+        // Checks if the edit texts are not empty
+        if (TextUtils.isEmpty(eventName) || TextUtils.isEmpty(eventDateTime) || TextUtils.isEmpty(eventDescription) || TextUtils.isEmpty(eventDetails)) {
+            Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                        String[] categories = getResources().getStringArray(R.array.add_event_categories);
-                        for (int i = 0; i < categories.length; i++) {
-                            if (categories[i].equalsIgnoreCase(event.getCategory())) {
-                                spinnerCategory2.setSelection(i);
-                                break;
-                            }
-                        }
-                    }
-                });
-    }
-
-    public void updateEvent(View view) {
-        String name = editTextName2.getText().toString();
-        String dateTime = editTextDateTime2.getText().toString();
-        String description = editTextDescription2.getText().toString();
-        String details = editTextDetails2.getText().toString();
-        String category = spinnerCategory2.getSelectedItem().toString();
-        boolean isOnline = checkBoxIsOnline2.isChecked();
-
+        // Checks if the event is online before processing adding the event
         if (isOnline) {
-            firestore.collection("events").document(eventId)
-                    .update("eventName", name, "dateTime", dateTime, "description", description, "details", details, "category", category, "isOnline", true, "locationId", null)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(EditEventActivity.this, "Event updated successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
-        } else {
-            String street = editTextStreet2.getText().toString();
-            String city = editTextCity2.getText().toString();
-            String country = editTextCountry2.getText().toString();
+            // Creates new instance of the event and initialize the values
+            Event event = new Event(userId, eventName, eventDateTime, eventDescription, eventDetails, selectedCategory, null, true);
+            // Adds the new event to the firestore "events" collection
+            firestore.collection("events").add(event)
+                    // Handles the action when adding an event to the firestore succeed
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(this, "Event added successfully", Toast.LENGTH_SHORT).show();
+                        // Starts a new transition from the current activity to the Main Activity after the adding new event to firestore succeed
+                        Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    })
+                    // handles the action when adding an event fail
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error adding event", Toast.LENGTH_SHORT).show());
+        }
+        else { // Handles the physical location details of the event when the location is not online
+            String street = editTextStreet.getText().toString().trim();
+            String city = editTextCity.getText().toString().trim();
+            String country = editTextCountry.getText().toString().trim();
 
+            // Checks if the edit texts are not empty
             if (TextUtils.isEmpty(street) || TextUtils.isEmpty(city) || TextUtils.isEmpty(country)) {
                 Toast.makeText(this, "Please fill all the location fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            firestore.collection("locations").whereEqualTo("street", street).whereEqualTo("city", city).whereEqualTo("country", country)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            Location location = new Location(street, city, country);
-                            firestore.collection("locations").add(location)
-                                    .addOnSuccessListener(locationDocumentReference -> {
-                                        String locationId = locationDocumentReference.getId();
-                                        updateEventInFirestore(eventId, name, dateTime, description, details, category, isOnline, locationId);
-                                    });
-                        } else {
-                            String locationId = queryDocumentSnapshots.getDocuments().get(0).getId();
-                            updateEventInFirestore(eventId, name, dateTime, description, details, category, isOnline, locationId);
-                        }
-                    });
+            // Creates new instance of the event's location and initialize the values
+            Location location = new Location(street, city, country);
+            // Adds the new location details to the corresponding firestore "locations" collection
+            firestore.collection("locations").add(location)
+                    // Handles the action when adding the associated event's location to the firestore succeed
+                    .addOnSuccessListener(documentReference -> {
+                        // Gets the location ID from firestore 
+                        String locationId = documentReference.getId();
+                        // Creates new instance of the event and initialize the values
+                        Event event = new Event(userId, eventName, eventDateTime, eventDescription, eventDetails, selectedCategory, locationId, false);
+                        // Adds the new event to the firestore "events" collection with the associate location ID
+                        firestore.collection("events").add(event)
+                                // If the operation succeed
+                                .addOnSuccessListener(eventDocumentReference -> {
+                                    Toast.makeText(this, "Event added successfully", Toast.LENGTH_SHORT).show();
+                                    // Start the activity transition from AddEventActivity to MainActivity after success
+                                    Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                })
+                                // If the operation fails
+                                .addOnFailureListener(e -> Toast.makeText(this, "Error adding event", Toast.LENGTH_SHORT).show());
+                    })
+                    // Handles any occurrence of failure when adding the associated event's location to the firestore
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error adding location", Toast.LENGTH_SHORT).show());
         }
-    }
-
-    private void updateEventInFirestore(String eventId, String name, String dateTime, String description, String details, String category, boolean isOnline, String locationId) {
-        firestore.collection("events").document(eventId)
-                .update("eventName", name, "dateTime", dateTime, "description", description, "details", details, "category", category, "isOnline", isOnline, "locationId", locationId)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(EditEventActivity.this, "Event updated successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                });
     }
 }
