@@ -19,8 +19,6 @@ Events Founder aims to connect people through various events, enabling users to 
 - **Real-time Updates:** Changes in the event details are updated instantaneously for all users.
 
 ![Screenshot of Events Founder](screenshots/event-creation.jpg)
-![Screenshot of Events Founder](screenshots/event-details.png)
-
 
 ## Installation
 
