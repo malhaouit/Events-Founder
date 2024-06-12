@@ -23,24 +23,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class EventDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "EventDetailActivity";
+    // UI components for displaying event details
     private TextView eventName, eventDateTime, eventDescription, eventDetails, eventLocation;
+    // Firebase Firestore instance
     private FirebaseFirestore firestore;
+    // Buttons for editing and deleting the event
     private Button edit_event_button, delete_event_button;
+    // Event ID for the event being displayed
     private String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
+
+        // Set the content view to the event detail layout
         setContentView(R.layout.activity_event_detail);
+
+        // Apply window insets to the main view
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Set the title of the activity
         setTitle(R.string.activity_event_details_title);
 
+        // Initialize UI components
         eventName = findViewById(R.id.eventName);
         eventDateTime = findViewById(R.id.eventDateTime);
         eventDescription = findViewById(R.id.eventDescription);
@@ -49,12 +58,16 @@ public class EventDetailActivity extends AppCompatActivity {
         edit_event_button = findViewById(R.id.edit_event_button);
         delete_event_button = findViewById(R.id.delete_event_button);
 
+        // Initialize Firestore instance
         firestore = FirebaseFirestore.getInstance();
 
+        // Get the event ID from the intent
         eventId = getIntent().getStringExtra("eventId");
 
+        // Fetch event details for displaying
         fetchEventDetails(eventId);
 
+        // Set the edit button click listener
         edit_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +77,7 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
 
+        // Set the delete button click listener
         delete_event_button.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("Delete Event")
@@ -78,9 +92,11 @@ public class EventDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Fetch event details again when the activity is resumed
         fetchEventDetails(eventId);
     }
 
+    // Delete the event from Firestore
     private void deleteEvent(String eventId) {
         firestore.collection("events").document(eventId).delete()
                 .addOnSuccessListener(aVoid -> {
@@ -90,6 +106,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(EventDetailActivity.this, "Error deleting event", Toast.LENGTH_SHORT).show());
     }
 
+    // Fetch event details from Firestore
     private void fetchEventDetails(String eventId) {
         firestore.collection("events").document(eventId).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -102,8 +119,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             // User is the creator, show edit and delete buttons
                             edit_event_button.setVisibility(View.VISIBLE);
                             delete_event_button.setVisibility(View.VISIBLE);
-                        }
-                        else {
+                        } else {
                             // User is not the creator, hide edit and delete buttons
                             edit_event_button.setVisibility(View.GONE);
                             delete_event_button.setVisibility(View.GONE);
@@ -115,6 +131,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Update the UI with event details
     private void updateUIWithEventDetails(Event event) {
         eventName.setText(event.getEventName());
         eventDateTime.setText(event.getDateTime());
@@ -123,12 +140,12 @@ public class EventDetailActivity extends AppCompatActivity {
 
         if (event.isOnline()) {
             eventLocation.setText("Online");
-        }
-        else {
+        } else {
             fetchLocationDetails(event.getLocationId());
         }
     }
 
+    // Fetch location details from Firestore
     private void fetchLocationDetails(String locationId) {
         firestore.collection("locations").document(locationId).get()
                 .addOnSuccessListener(documentSnapshot -> {

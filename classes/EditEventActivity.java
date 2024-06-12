@@ -19,26 +19,36 @@ import com.amtrustdev.localeventfinder.models.Location;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EditEventActivity extends AppCompatActivity {
+    // UI components
     private EditText editTextName2, editTextDateTime2, editTextDescription2, editTextDetails2, editTextStreet2, editTextCity2, editTextCountry2;
     private CheckBox checkBoxIsOnline2;
-    private Button buttonSaveEvent2;;
-    private FirebaseFirestore firestore;
+    private Button buttonSaveEvent2;
     private Spinner spinnerCategory2;
+
+    // Firebase Firestore instance
+    private FirebaseFirestore firestore;
+
+    // Event ID to be edited
     private String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
+
+        // Set the content view to the edit event layout
         setContentView(R.layout.activity_edit_event);
+
+        // Apply window insets to the main view
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Set the title of the activity
         setTitle(R.string.activity_edit_event_title);
 
+        // Initialize UI components
         editTextName2 = findViewById(R.id.editTextEventName2);
         editTextDateTime2 = findViewById(R.id.editTextEventDateTime2);
         editTextDescription2 = findViewById(R.id.editTextEventDescription2);
@@ -48,23 +58,29 @@ public class EditEventActivity extends AppCompatActivity {
         editTextCountry2 = findViewById(R.id.editTextCountry2);
         checkBoxIsOnline2 = findViewById(R.id.checkBoxIsOnline2);
         buttonSaveEvent2 = findViewById(R.id.buttonSaveEvent2);
-
-        firestore = FirebaseFirestore.getInstance();
-
         spinnerCategory2 = findViewById(R.id.spinnerCategory2);
 
+        // Initialize Firestore instance
+        firestore = FirebaseFirestore.getInstance();
+
+        // Get the event ID from the intent
         eventId = getIntent().getStringExtra("eventId");
+
+        // Load event data for editing
         loadEventData(eventId);
 
+        // Handle checkbox state changes
         checkBoxIsOnline2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editTextStreet2.setEnabled(!isChecked);
             editTextCity2.setEnabled(!isChecked);
             editTextCountry2.setEnabled(!isChecked);
         });
 
+        // Set the save button click listener
         buttonSaveEvent2.setOnClickListener(this::updateEvent);
     }
 
+    // Load event data from Firestore
     private void loadEventData(String eventId) {
         firestore.collection("events").document(eventId).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -80,8 +96,7 @@ public class EditEventActivity extends AppCompatActivity {
                             editTextStreet2.setEnabled(false);
                             editTextCity2.setEnabled(false);
                             editTextCountry2.setEnabled(false);
-                        }
-                        else  {
+                        } else {
                             firestore.collection("locations").document(event.getLocationId()).get()
                                     .addOnSuccessListener(locationSnapshot -> {
                                         Location location = locationSnapshot.toObject(Location.class);
@@ -104,6 +119,7 @@ public class EditEventActivity extends AppCompatActivity {
                 });
     }
 
+    // Update the event data
     public void updateEvent(View view) {
         String name = editTextName2.getText().toString();
         String dateTime = editTextDateTime2.getText().toString();
@@ -147,6 +163,7 @@ public class EditEventActivity extends AppCompatActivity {
         }
     }
 
+    // Update event data in Firestore
     private void updateEventInFirestore(String eventId, String name, String dateTime, String description, String details, String category, boolean isOnline, String locationId) {
         firestore.collection("events").document(eventId)
                 .update("eventName", name, "dateTime", dateTime, "description", description, "details", details, "category", category, "isOnline", isOnline, "locationId", locationId)
