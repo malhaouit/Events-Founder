@@ -18,7 +18,9 @@ Events Founder aims to connect people through various events, enabling users to 
 - **Event Categories:** Users can filter events by categories like Health, Sport, Food & Drink, Hobbies, and Business, facilitating easier navigation.
 - **Real-time Updates:** Changes in the event details are updated instantaneously for all users.
 
-![Screenshot of Events Founder](screenshots/event-creation.jpg)
+<p align="center">
+  <img src="images/screenshot.png" alt="Screenshot of Events Founder">
+</p>
 
 ## Installation
 
