@@ -7,7 +7,7 @@ Events Founder is an Android application designed to allow users to create, mana
 Events Founder aims to connect people through various events, enabling users to explore activities they love or discover new passions. This application simplifies event management and discovery by offering robust features powered by modern technology. For more insights and the story behind this project, read our [blog post](#).
 
 - **Landing page:** [https://malhaouit.github.io/](#)
-- **Final project blog article:** [https://medium.com/@abdelmounaim.abdel/portfolio-project-blog-post-for-events-founder-624a4b007c93](#)
+- **Final project blog article:** [https://www.linkedin.com/feed/update/urn:li:activity:7206782815772835841/](#)
 - **Author:** [https://www.linkedin.com/in/abdelmounaim-malhaoui/](#) (my LinkedIn profile)
 
 ## Features
