@@ -1,14 +1,22 @@
 # Events Founder
 
-Events Founder is an Android application that allows users to create, manage, and discover various events. The app is integrated with Firebase Firestore for real-time data storage and retrieval.
+Events Founder is an Android application designed to allow users to create, manage, and discover events worldwide. This project integrates with Firebase Firestore to provide real-time data storage and retrieval, enhancing the user experience with dynamic content updates.
+
+## Introduction
+
+Events Founder aims to connect people through various events, enabling users to explore activities they love or discover new passions. This application simplifies event management and discovery by offering robust features powered by modern technology. For more insights and the story behind this project, read our [blog post](#).
+
+- **Landing page:** [https://malhaouit.github.io/](#)
+- **Final project blog article:** [https://medium.com/@abdelmounaim.abdel/portfolio-project-blog-post-for-events-founder-624a4b007c93](#)
+- **Author:** [https://www.linkedin.com/in/abdelmounaim-malhaoui/](#) (my LinkedIn profile)
 
 ## Features
 
-- **Create Events:** Users can add new events with details like name, date, time, description, and location.
-- **Edit Events:** Users can edit their events.
-- **Delete Events:** Users can delete their events.
-- **Event Categories:** Filter events based on categories such as health, sport, food & drink, hobbies, and business.
-- **Real-time Updates:** Real-time data synchronization with Firebase Firestore.
+- **Create Events:** Users can input detailed information about their events, including names, dates, times, descriptions, and locations.
+- **Edit Events:** Modify details of existing events easily.
+- **Delete Events:** Remove events no longer needed.
+- **Event Categories:** Users can filter events by categories like Health, Sport, Food & Drink, Hobbies, and Business, facilitating easier navigation.
+- **Real-time Updates:** Changes in the event details are updated instantaneously for all users.
 
 ## Installation
 
@@ -37,3 +45,11 @@ Events Founder is an Android application that allows users to create, manage, an
 
 	- Click on an event in the list to view details.  
 	- Click the Delete button.
+
+## Contributing
+
+Interested in contributing? Great! First, fork the repository. Make your changes and create a pull request. All contributions are appreciated!  
+
+## Licensing
+
+Events Founder is made available under the MIT License, which permits use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, provided that the above copyright notice and this permission notice appear in all copies. This project is part of the educational curriculum of ALX.
