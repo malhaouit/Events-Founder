@@ -19,7 +19,7 @@ Events Founder aims to connect people through various events, enabling users to 
 - **Real-time Updates:** Changes in the event details are updated instantaneously for all users.
 
 <p align="center">
-  <img src="images/screenshot.png" alt="Screenshot of Events Founder">
+  <img src="screenshots/event-creation.jpg" alt="Screenshot of Events Founder">
 </p>
 
 ## Installation
